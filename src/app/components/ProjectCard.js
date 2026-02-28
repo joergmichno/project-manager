@@ -1,3 +1,7 @@
+"use client";
+
+import { useApp } from "../context";
+
 const priorityColors = {
     critical: "bg-[var(--color-danger)]",
     high: "bg-[var(--color-warning)]",
@@ -13,12 +17,13 @@ const statusLabels = {
 };
 
 export default function ProjectCard({ project, delay }) {
+    const { openProjectDetail } = useApp();
     const status = statusLabels[project.status] || statusLabels.planning;
     const budgetPercent = Math.round((project.budget.spent / project.budget.total) * 100);
     const isOverBudget = budgetPercent > 90;
 
     return (
-        <div className={`glass rounded-2xl p-5 animate-fade-in ${delay || ""} hover:border-[var(--color-primary)]/30 transition-all duration-300 group`}>
+        <div onClick={() => openProjectDetail(project.id)} className={`glass rounded-2xl p-5 animate-fade-in ${delay || ""} hover:border-[var(--color-primary)]/30 transition-all duration-300 group cursor-pointer`}>
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
