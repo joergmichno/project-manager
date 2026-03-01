@@ -7,7 +7,7 @@ const navItems = [
     { icon: "📁", label: "Projekte", page: "projects" },
     { icon: "✅", label: "Aufgaben", page: "tasks" },
     { icon: "👥", label: "Team", page: "team" },
-    { icon: "📅", label: "Kalender", page: "calendar" },
+    { icon: "📅", label: "Gantt-Planer", page: "calendar" },
     { icon: "📈", label: "Berichte", page: "reports" },
     { icon: "⚙️", label: "Einstellungen", page: "settings" },
 ];
@@ -31,7 +31,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
                 {!collapsed && (
                     <div className="animate-fade-in">
                         <h1 className="text-base font-bold text-white leading-tight">Project Manager</h1>
-                        <p className="text-[11px] text-[var(--color-text-muted)]">Dashboard v1.0</p>
+                        <p className="text-[11px] text-[var(--color-text-muted)]">Dashboard v2.0</p>
                     </div>
                 )}
             </div>
@@ -43,8 +43,8 @@ export default function Sidebar({ collapsed, setCollapsed }) {
                         key={item.label}
                         onClick={() => setCurrentPage(item.page)}
                         className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg mb-1 transition-all duration-200 text-sm ${currentPage === item.page
-                                ? "bg-[var(--color-primary)] bg-opacity-20 text-[var(--color-primary-light)] shadow-lg shadow-[var(--color-primary)]/10"
-                                : "text-[var(--color-text-muted)] hover:bg-[var(--color-surface-light)] hover:text-[var(--color-text)]"
+                            ? "bg-[var(--color-primary)] bg-opacity-20 text-[var(--color-primary-light)] shadow-lg shadow-[var(--color-primary)]/10"
+                            : "text-[var(--color-text-muted)] hover:bg-[var(--color-surface-light)] hover:text-[var(--color-text)]"
                             }`}
                     >
                         <span className="text-lg shrink-0">{item.icon}</span>

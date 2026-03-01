@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useApp } from "../context";
 
 const statusLabels = {
@@ -338,6 +339,220 @@ export function PlaceholderPage({ title, icon }) {
             <span className="text-5xl mb-4">{icon}</span>
             <h2 className="text-xl font-bold text-white mb-2">{title}</h2>
             <p className="text-sm text-[var(--color-text-muted)]">Diese Seite wird bald verfügbar sein.</p>
+        </div>
+    );
+}
+
+/* ═══════════════════════════════════ */
+/* REPORTS PAGE                        */
+/* ═══════════════════════════════════ */
+export function ReportsPage() {
+    const { projects, kanbanTasks, teamMembers } = useApp();
+
+    const totalTasks = projects.reduce((acc, p) => acc + p.tasks.total, 0);
+    const completedTasks = projects.reduce((acc, p) => acc + p.tasks.completed, 0);
+    const totalBudget = projects.reduce((acc, p) => acc + p.budget.total, 0);
+    const spentBudget = projects.reduce((acc, p) => acc + p.budget.spent, 0);
+    const completionRate = totalTasks ? Math.round((completedTasks / totalTasks) * 100) : 0;
+    const budgetRate = totalBudget ? Math.round((spentBudget / totalBudget) * 100) : 0;
+
+    const [isExporting, setIsExporting] = useState(false);
+
+    const handleExport = () => {
+        setIsExporting(true);
+        setTimeout(() => setIsExporting(false), 2000);
+    };
+
+    return (
+        <div className="animate-fade-in space-y-6">
+            <div className="flex items-center justify-between">
+                <div>
+                    <h2 className="text-xl font-bold text-white">Berichte & Analysen</h2>
+                    <p className="text-xs text-[var(--color-text-muted)] mt-1">Übersicht über Projektfortschritte und Budgets</p>
+                </div>
+                <button onClick={handleExport} disabled={isExporting} className="px-4 py-2 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl text-sm hover:border-[var(--color-primary)] transition-all text-white flex items-center gap-2">
+                    {isExporting ? <span className="animate-spin inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full" /> : "⏬"}
+                    {isExporting ? "Exportiere..." : "PDF Exportieren"}
+                </button>
+            </div>
+
+            {/* Top KPIs */}
+            <div className="grid grid-cols-4 gap-5">
+                <div className="glass rounded-2xl p-5 border-l-4 border-l-[var(--color-success)]">
+                    <p className="text-sm text-[var(--color-text-muted)]">Aufgaben-Abschlussrate</p>
+                    <p className="text-3xl font-bold text-white mt-1">{completionRate}%</p>
+                    <p className="text-xs text-[var(--color-text-muted)] mt-1">{completedTasks} von {totalTasks} erledigt</p>
+                </div>
+                <div className="glass rounded-2xl p-5 border-l-4 border-l-[var(--color-warning)]">
+                    <p className="text-sm text-[var(--color-text-muted)]">Budget-Verbrauch</p>
+                    <p className="text-3xl font-bold text-white mt-1">{budgetRate}%</p>
+                    <p className="text-xs text-[var(--color-text-muted)] mt-1">€{(spentBudget / 1000).toFixed(0)}k von €{(totalBudget / 1000).toFixed(0)}k</p>
+                </div>
+                <div className="glass rounded-2xl p-5 border-l-4 border-l-[var(--color-primary)]">
+                    <p className="text-sm text-[var(--color-text-muted)]">Aktive Projekte</p>
+                    <p className="text-3xl font-bold text-white mt-1">{projects.length}</p>
+                    <p className="text-xs text-[var(--color-text-muted)] mt-1">In {projects.length} Bereichen</p>
+                </div>
+                <div className="glass rounded-2xl p-5 border-l-4 border-l-[var(--color-accent)]">
+                    <p className="text-sm text-[var(--color-text-muted)]">Team-Auslastung</p>
+                    <p className="text-3xl font-bold text-white mt-1">{Math.round((totalTasks - completedTasks) / (teamMembers.length || 1))}</p>
+                    <p className="text-xs text-[var(--color-text-muted)] mt-1">Offene Tasks Ø pro Person</p>
+                </div>
+            </div>
+
+            {/* Charts Area */}
+            <div className="grid grid-cols-2 gap-6">
+                {/* Project Progress */}
+                <div className="glass rounded-2xl p-6">
+                    <h3 className="text-sm font-semibold text-white mb-4">Projekt-Fortschritt & Budget</h3>
+                    <div className="space-y-4">
+                        {projects.map(p => {
+                            const pSpent = p.budget.total ? (p.budget.spent / p.budget.total) * 100 : 0;
+                            return (
+                                <div key={p.id} className="bg-[var(--color-surface)] p-3 rounded-xl border border-[var(--color-border)]">
+                                    <div className="flex justify-between mb-2">
+                                        <span className="text-sm font-medium text-white">{p.name}</span>
+                                        <span className="text-xs text-[var(--color-text-muted)]">{p.progress}% Fortschritt</span>
+                                    </div>
+                                    <div className="w-full h-1.5 bg-[var(--color-surface-lighter)] rounded-full mb-3">
+                                        <div className="h-full bg-[var(--color-success)] rounded-full" style={{ width: `${p.progress}%` }} />
+                                    </div>
+                                    <div className="flex justify-between mb-1">
+                                        <span className="text-[10px] text-[var(--color-text-muted)]">Budget-Verbrauch</span>
+                                        <span className={`text-[10px] font-bold ${pSpent > 90 ? 'text-[var(--color-danger)]' : 'text-white'}`}>{Math.round(pSpent)}%</span>
+                                    </div>
+                                    <div className="w-full h-1.5 bg-[var(--color-surface-lighter)] rounded-full">
+                                        <div className={`h-full rounded-full ${pSpent > 90 ? 'bg-[var(--color-danger)]' : 'bg-[var(--color-warning)]'}`} style={{ width: `${Math.min(100, pSpent)}%` }} />
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {/* Team Workload */}
+                <div className="glass rounded-2xl p-6">
+                    <h3 className="text-sm font-semibold text-white mb-4">Team-Auslastung (Aktive Aufgaben)</h3>
+                    <div className="space-y-4">
+                        {teamMembers.map(m => {
+                            let openCount = 0;
+                            let inProgCount = 0;
+                            kanbanTasks.todo.forEach(t => t.assignee === m.initials && openCount++);
+                            kanbanTasks.inProgress.forEach(t => t.assignee === m.initials && inProgCount++);
+
+                            const maxW = 8; // assumption for max logical tasks safely doable
+                            const current = openCount + inProgCount;
+                            const percent = Math.min((current / maxW) * 100, 100);
+
+                            return (
+                                <div key={m.id} className="flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold shrink-0" style={{ backgroundColor: m.color + "33", color: m.color }}>{m.initials}</div>
+                                    <div className="flex-1">
+                                        <div className="flex justify-between mb-1">
+                                            <span className="text-xs text-white">{m.name}</span>
+                                            <span className="text-[10px] text-[var(--color-text-muted)]">{current} Tasks</span>
+                                        </div>
+                                        <div className="w-full h-2 bg-[var(--color-surface-lighter)] rounded-full overflow-hidden flex">
+                                            <div className="h-full bg-[var(--color-primary)]" style={{ width: `${(inProgCount / maxW) * 100}%` }} title="In Bearbeitung" />
+                                            <div className="h-full bg-[var(--color-border)] opacity-50" style={{ width: `${(openCount / maxW) * 100}%` }} title="Offen" />
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+/* ═══════════════════════════════════ */
+/* SETTINGS PAGE                       */
+/* ═══════════════════════════════════ */
+export function SettingsPage() {
+    const { setCurrentPage } = useApp();
+
+    return (
+        <div className="animate-fade-in max-w-4xl mx-auto space-y-6">
+            <div>
+                <h2 className="text-xl font-bold text-white">Einstellungen</h2>
+                <p className="text-xs text-[var(--color-text-muted)] mt-1">Passe deinen Project Manager an</p>
+            </div>
+
+            <div className="glass rounded-2xl p-6">
+                <h3 className="text-sm font-semibold text-white mb-4 border-b border-[var(--color-border)] pb-2">Profil & Account</h3>
+                <div className="flex gap-6 items-center mb-6">
+                    <div className="w-20 h-20 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-accent)] rounded-2xl flex items-center justify-center text-2xl font-bold text-white shadow-lg">
+                        JM
+                    </div>
+                    <div>
+                        <button className="px-3 py-1.5 bg-[var(--color-surface)] hover:bg-[var(--color-surface-lighter)] text-sm rounded-lg text-white transition-colors border border-[var(--color-border)]">Avatar ändern</button>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-xs font-medium text-[var(--color-text-muted)] mb-1">Voller Name</label>
+                        <input type="text" defaultValue="Jörg Michno" className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-[var(--color-primary)]" />
+                    </div>
+                    <div>
+                        <label className="block text-xs font-medium text-[var(--color-text-muted)] mb-1">E-Mail Adresse</label>
+                        <input type="email" defaultValue="joerg.michno@example.com" className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-[var(--color-primary)]" />
+                    </div>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-6">
+                <div className="glass rounded-2xl p-6">
+                    <h3 className="text-sm font-semibold text-white mb-4 border-b border-[var(--color-border)] pb-2">App-Einstellungen</h3>
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm text-white">Erscheinungsbild</p>
+                                <p className="text-[10px] text-[var(--color-text-muted)]">Dark Mode (Standard), Light Mode</p>
+                            </div>
+                            <select className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg px-3 py-1 text-sm text-white focus:outline-none cursor-not-allowed" disabled>
+                                <option>Dark (System)</option>
+                                <option>Light</option>
+                            </select>
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm text-white">Wochenanfang</p>
+                                <p className="text-[10px] text-[var(--color-text-muted)]">Starttag für Gantt & Kalender</p>
+                            </div>
+                            <select className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg px-3 py-1 text-sm text-white focus:outline-none">
+                                <option>Montag</option>
+                                <option>Sonntag</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="glass rounded-2xl p-6">
+                    <h3 className="text-sm font-semibold text-white mb-4 border-b border-[var(--color-border)] pb-2">Benachrichtigungen</h3>
+                    <div className="space-y-3 text-sm">
+                        <label className="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" defaultChecked className="w-4 h-4 rounded border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-primary)] focus:ring-[var(--color-primary)] group-hover:ring-2 group-hover:ring-[var(--color-primary)]/40 transition-shadow" />
+                            <span className="text-white group-hover:text-[var(--color-primary-light)] transition-colors">Aufgaben-Zuweisungen (In-App)</span>
+                        </label>
+                        <label className="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" defaultChecked className="w-4 h-4 rounded border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-primary)] focus:ring-[var(--color-primary)] group-hover:ring-2 group-hover:ring-[var(--color-primary)]/40 transition-shadow" />
+                            <span className="text-[var(--color-text-muted)] group-hover:text-[var(--color-primary-light)] transition-colors">Nahende Deadlines (&lt; 3 Tage)</span>
+                        </label>
+                        <label className="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" className="w-4 h-4 rounded border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-primary)] focus:ring-[var(--color-primary)] group-hover:ring-2 group-hover:ring-[var(--color-primary)]/40 transition-shadow" />
+                            <span className="text-[var(--color-text-muted)] group-hover:text-[var(--color-primary-light)] transition-colors">Tägliches Zusammenfassungs-E-Mail</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex justify-end gap-3 mt-6">
+                <button onClick={() => setCurrentPage("dashboard")} className="px-4 py-2 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl text-sm hover:bg-[var(--color-surface-lighter)] text-white transition-colors">Abbrechen</button>
+                <button onClick={() => setCurrentPage("dashboard")} className="px-4 py-2 bg-[var(--color-primary)] hover:brightness-110 rounded-xl text-sm text-white font-medium transition-all shadow-lg shadow-[var(--color-primary)]/20">Änderungen speichern</button>
+            </div>
         </div>
     );
 }

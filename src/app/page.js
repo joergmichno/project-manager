@@ -8,7 +8,8 @@ import ProjectCard from "./components/ProjectCard";
 import ActivityChart from "./components/ActivityChart";
 import KanbanBoard from "./components/KanbanBoard";
 import { AddTaskModal, TaskDetailModal, ProjectModal, MemberModal, DeleteConfirmModal, NotificationsPanel } from "./components/Modals";
-import { ProjectsPage, TasksPage, TeamPage, PlaceholderPage } from "./components/Pages";
+import { ProjectsPage, TasksPage, TeamPage, PlaceholderPage, ReportsPage, SettingsPage } from "./components/Pages";
+import GanttChart from "./components/GanttChart";
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -73,9 +74,9 @@ function DashboardContent() {
       case "projects": return <ProjectsPage />;
       case "tasks": return <TasksPage />;
       case "team": return <TeamPage />;
-      case "calendar": return <PlaceholderPage title="Kalender" icon="📅" />;
-      case "reports": return <PlaceholderPage title="Berichte" icon="📈" />;
-      case "settings": return <PlaceholderPage title="Einstellungen" icon="⚙️" />;
+      case "calendar": return <GanttChart />;
+      case "reports": return <ReportsPage />;
+      case "settings": return <SettingsPage />;
       case "project-detail": return <ProjectDetailView />;
       case "member-detail": return <MemberDetailView />;
       default: return renderDashboard();
@@ -95,8 +96,8 @@ function DashboardContent() {
                 key={i}
                 onClick={() => w.projectId && openProjectDetail(w.projectId)}
                 className={`rounded-xl px-4 py-3 text-sm border cursor-pointer transition-all hover:brightness-110 ${w.type === "danger"
-                    ? "bg-[var(--color-danger)]/10 border-[var(--color-danger)]/30 text-[var(--color-danger)]"
-                    : "bg-[var(--color-warning)]/10 border-[var(--color-warning)]/30 text-[var(--color-warning)]"
+                  ? "bg-[var(--color-danger)]/10 border-[var(--color-danger)]/30 text-[var(--color-danger)]"
+                  : "bg-[var(--color-warning)]/10 border-[var(--color-warning)]/30 text-[var(--color-warning)]"
                   }`}
               >
                 {w.text}
