@@ -1,13 +1,13 @@
 # 📊 Project Manager
 
-**Webbasiertes Projektmanagement-Dashboard — IHK-Abschlussprojekt**
+**Webbasiertes Projektmanagement-Dashboard**
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=black)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-000000?style=flat&logo=vercel&logoColor=white)](https://project-manager-five-olive.vercel.app/)
 
-Ein modernes Projektmanagement-Dashboard für Freelancer und kleine Teams. Entwickelt als **IHK-Abschlussprojekt** im Rahmen der Umschulung zum Fachinformatiker für Anwendungsentwicklung.
+Ein modernes Projektmanagement-Dashboard für Freelancer und kleine Teams. Ursprünglich als IHK-Abschlussprojekt begonnen, inzwischen stetig weiterentwickelt mit neuen Features.
 
 **[Live Demo →](https://project-manager-five-olive.vercel.app/)**
 
@@ -81,14 +81,14 @@ npm run dev
 
 Die Live-Demo ist unter **[project-manager-five-olive.vercel.app](https://project-manager-five-olive.vercel.app/)** erreichbar.
 
-## Kontext
+## Hintergrund
 
-Dieses Projekt entstand als **IHK-Abschlussprojekt** (Fachinformatiker für Anwendungsentwicklung) an der Bildungsakademie Hannover. Es demonstriert:
+Ursprünglich als IHK-Abschlussprojekt gestartet, wird dieses Dashboard aktiv weiterentwickelt. Es demonstriert:
 
 - Modernes Frontend-Development mit React 19 + Next.js 16
-- Component-basierte Architektur mit State Management
-- Responsive UI/UX Design mit Tailwind CSS
-- Deployment und CI/CD mit Vercel
+- Component-basierte Architektur mit State Management (Context API)
+- Responsive UI/UX Design mit Tailwind CSS 4 + Glassmorphism
+- Continuous Deployment mit Vercel
 
 ## Lizenz
 
@@ -96,4 +96,4 @@ MIT License — siehe [LICENSE](LICENSE) für Details.
 
 ---
 
-**Erstellt von [Jörg Michno](https://github.com/joergmichno)** — IHK-Abschlussprojekt 2026 📊
+**Erstellt von [Jörg Michno](https://github.com/joergmichno)** 📊
