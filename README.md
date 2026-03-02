@@ -2,9 +2,11 @@
 
 **Webbasiertes Projektmanagement-Dashboard**
 
+[![CI](https://github.com/joergmichno/project-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/joergmichno/project-manager/actions/workflows/ci.yml)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=black)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-000000?style=flat&logo=vercel&logoColor=white)](https://project-manager-five-olive.vercel.app/)
 
 Ein modernes Projektmanagement-Dashboard für Freelancer und kleine Teams. Ursprünglich als IHK-Abschlussprojekt begonnen, inzwischen stetig weiterentwickelt mit neuen Features.
@@ -90,10 +92,16 @@ Ursprünglich als IHK-Abschlussprojekt gestartet, wird dieses Dashboard aktiv we
 - Responsive UI/UX Design mit Tailwind CSS 4 + Glassmorphism
 - Continuous Deployment mit Vercel
 
+## Related Projects
+
+- **[ClawGuard](https://github.com/joergmichno/clawguard)** — Security scanner for AI agents (38+ patterns, 53 tests)
+- **[DocQA](https://github.com/joergmichno/docqa)** — RAG-based document Q&A tool
+- **[Prompt Lab](https://github.com/joergmichno/prompt-lab)** — Interactive prompt injection playground ([Live Demo](https://prompttools.co))
+
 ## Lizenz
 
 MIT License — siehe [LICENSE](LICENSE) für Details.
 
 ---
 
-**Erstellt von [Jörg Michno](https://github.com/joergmichno)** 📊
+**Erstellt von [Jörg Michno](https://github.com/joergmichno)** — Projektmanagement-Dashboard mit Gantt-Planer und Kanban-Board. 📊

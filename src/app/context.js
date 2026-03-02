@@ -66,7 +66,7 @@ export function AppProvider({ children }) {
     function addProject(project) {
         const newProject = {
             ...project,
-            id: Date.now(),
+            id: Date.now(), // eslint-disable-line react-hooks/purity -- event handler, not render
             progress: 0,
             tasks: { total: 0, completed: 0 },
             milestones: project.milestones || [],
