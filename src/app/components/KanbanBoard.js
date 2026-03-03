@@ -99,11 +99,11 @@ export default function KanbanBoard({ tasks }) {
                 </button>
             </div>
 
-            <div className="grid grid-cols-4 gap-4">
+            <div className="flex lg:grid lg:grid-cols-4 gap-4 overflow-x-auto pb-2 snap-x snap-mandatory">
                 {columns.map((col) => (
                     <div
                         key={col.key}
-                        className="kanban-column rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-card)]/50 p-3 transition-colors duration-200 min-h-[200px]"
+                        className="kanban-column rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-card)]/50 p-3 transition-colors duration-200 min-h-[200px] min-w-[260px] lg:min-w-0 snap-start"
                     >
                         {/* Column Header */}
                         <div className="flex items-center gap-2 mb-3 px-1">

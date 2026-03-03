@@ -12,14 +12,23 @@ const navItems = [
     { icon: "⚙️", label: "Einstellungen", page: "settings" },
 ];
 
-export default function Sidebar({ collapsed, setCollapsed }) {
+export default function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) {
     const { currentPage, setCurrentPage } = useApp();
 
+    const handleNavClick = (page) => {
+        setCurrentPage(page);
+        if (setMobileOpen) setMobileOpen(false);
+    };
+
     return (
-        <aside
-            className={`fixed left-0 top-0 h-full bg-[var(--color-surface)] border-r border-[var(--color-border)] transition-all duration-300 z-50 flex flex-col ${collapsed ? "w-[72px]" : "w-[240px]"
-                }`}
-        >
+        <>
+            {/* Mobile Overlay */}
+            {mobileOpen && (
+                <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setMobileOpen(false)} />
+            )}
+            <aside
+                className={`fixed left-0 top-0 h-full bg-[var(--color-surface)] border-r border-[var(--color-border)] transition-all duration-300 z-50 flex flex-col ${collapsed ? "w-[72px]" : "w-[240px]"} ${mobileOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
+            >
             {/* Logo */}
             <div className="flex items-center gap-3 px-5 py-6 border-b border-[var(--color-border)]">
                 <button
@@ -41,7 +50,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
                 {navItems.map((item) => (
                     <button
                         key={item.label}
-                        onClick={() => setCurrentPage(item.page)}
+                        onClick={() => handleNavClick(item.page)}
                         className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg mb-1 transition-all duration-200 text-sm ${currentPage === item.page
                             ? "bg-[var(--color-primary)] bg-opacity-20 text-[var(--color-primary-light)] shadow-lg shadow-[var(--color-primary)]/10"
                             : "text-[var(--color-text-muted)] hover:bg-[var(--color-surface-light)] hover:text-[var(--color-text)]"
@@ -62,5 +71,6 @@ export default function Sidebar({ collapsed, setCollapsed }) {
                 {!collapsed && <span>Einklappen</span>}
             </button>
         </aside>
+        </>
     );
 }

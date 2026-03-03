@@ -26,6 +26,7 @@ function DashboardContent() {
   } = useApp();
 
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
   const totalTasks = projects.reduce((sum, p) => sum + p.tasks.total, 0);
@@ -107,7 +108,7 @@ function DashboardContent() {
         )}
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-4 gap-5 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-5 mb-6 lg:mb-8">
           <StatsCard icon="📁" label="Aktive Projekte" value={projects.length} change="12%" changeType="up" delay="stagger-1" />
           <StatsCard icon="✅" label="Aufgaben erledigt" value={`${completedTasks}/${totalTasks}`} change="8%" changeType="up" delay="stagger-2" />
           <StatsCard icon="💰" label="Budget verbraucht" value={`€${(spentBudget / 1000).toFixed(0)}k`} change={`${totalBudget > 0 ? Math.round((spentBudget / totalBudget) * 100) : 0}%`} changeType="neutral" delay="stagger-3" />
@@ -115,15 +116,15 @@ function DashboardContent() {
         </div>
 
         {/* Middle Row: Projects + Activity */}
-        <div className="grid grid-cols-3 gap-5 mb-8">
-          <div className="col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6 lg:mb-8">
+          <div className="lg:col-span-2">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-white font-semibold text-sm animate-fade-in">Aktive Projekte</h3>
               <button onClick={() => setCurrentPage("projects")} className="text-xs text-[var(--color-primary-light)] hover:text-[var(--color-primary)] transition-colors animate-fade-in">
                 Alle anzeigen →
               </button>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {projects.slice(0, 4).map((project, i) => (
                 <ProjectCard key={project.id} project={project} delay={`stagger-${i + 1}`} />
               ))}
@@ -164,13 +165,18 @@ function DashboardContent() {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+      <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
 
       {/* Main Content */}
-      <main className={`flex-1 transition-all duration-300 p-8 ${collapsed ? "ml-[72px]" : "ml-[240px]"}`}>
+      <main className={`flex-1 transition-all duration-300 p-4 lg:p-8 ml-0 ${collapsed ? "lg:ml-[72px]" : "lg:ml-[240px]"}`}>
         {/* Header */}
-        <header className="flex items-center justify-between mb-8 animate-fade-in">
-          <div>
+        <header className="flex items-center justify-between mb-6 lg:mb-8 animate-fade-in">
+          <div className="flex items-center gap-3">
+            {/* Mobile Hamburger */}
+            <button onClick={() => setMobileOpen(true)} className="lg:hidden w-10 h-10 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] flex items-center justify-center text-lg hover:border-[var(--color-primary)] transition-colors">
+              ☰
+            </button>
+            <div>
             <h1 className="text-2xl font-bold text-white">
               {currentPage === "dashboard" ? `${getGreeting()}, Jörg 👋` : ""}
             </h1>
@@ -182,15 +188,16 @@ function DashboardContent() {
             {currentPage !== "dashboard" && currentPage !== "project-detail" && currentPage !== "member-detail" && (
               <button onClick={() => setCurrentPage("dashboard")} className="text-xs text-[var(--color-primary-light)] hover:text-white transition-colors mt-1">← Zurück zum Dashboard</button>
             )}
+            </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 lg:gap-3">
             {/* Search */}
             <div className="relative">
               <input
                 type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Suchen..."
-                className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl px-4 py-2 pl-9 text-sm text-[var(--color-text)] placeholder-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-primary)] transition-colors w-[200px]"
+                className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl px-4 py-2 pl-9 text-sm text-[var(--color-text)] placeholder-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-primary)] transition-colors w-[120px] lg:w-[200px]"
               />
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] text-sm">🔍</span>
               {searchQuery && (
@@ -276,18 +283,18 @@ function ProjectDetailView() {
 
       {/* Project Header */}
       <div className="glass rounded-2xl p-6 mb-6">
-        <div className="flex items-start justify-between mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-4">
           <div>
-            <h2 className="text-2xl font-bold text-white mb-1">{p.name}</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">{p.name}</h2>
             <p className="text-sm text-[var(--color-text-muted)]">{p.client} • Priorität: {p.priority}</p>
             {p.description && <p className="text-sm text-[var(--color-text-muted)] mt-2">{p.description}</p>}
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 shrink-0">
             <button onClick={() => { setSelectedProject(p); setShowModal("editProject"); }} className="px-3 py-2 rounded-xl bg-[var(--color-surface)] text-sm text-[var(--color-primary-light)] hover:bg-[var(--color-primary)]/20 border border-[var(--color-border)] transition-all">✏️ Bearbeiten</button>
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-4 mb-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-4">
           <div className="bg-[var(--color-surface)] rounded-xl p-3 border border-[var(--color-border)] text-center">
             <p className="text-2xl font-bold text-white">{p.progress}%</p>
             <p className="text-[10px] text-[var(--color-text-muted)]">Fortschritt</p>
@@ -311,7 +318,7 @@ function ProjectDetailView() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
         {/* Milestones */}
         <div className="glass rounded-2xl p-5">
           <h3 className="text-sm font-semibold text-white mb-4">◇ Meilensteine</h3>
@@ -427,17 +434,17 @@ function MemberDetailView() {
 
       {/* Member Header */}
       <div className="glass rounded-2xl p-6 mb-6">
-        <div className="flex items-center gap-6">
-          <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-3xl font-bold" style={{ backgroundColor: m.color + "33", color: m.color }}>{m.initials}</div>
-          <div className="flex-1">
-            <h2 className="text-2xl font-bold text-white">{m.name}</h2>
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
+          <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-3xl font-bold shrink-0" style={{ backgroundColor: m.color + "33", color: m.color }}>{m.initials}</div>
+          <div className="flex-1 text-center sm:text-left">
+            <h2 className="text-xl sm:text-2xl font-bold text-white">{m.name}</h2>
             <p className="text-sm text-[var(--color-text-muted)]">{m.role}</p>
-            <div className="flex items-center gap-4 mt-2">
+            <div className="flex items-center justify-center sm:justify-start gap-4 mt-2 flex-wrap">
               {m.email && <span className="text-xs text-[var(--color-text-muted)]">📧 {m.email}</span>}
               {m.phone && <span className="text-xs text-[var(--color-text-muted)]">📱 {m.phone}</span>}
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 shrink-0">
             <button onClick={() => { setSelectedMember(m); setShowModal("editMember"); }} className="px-3 py-2 rounded-xl bg-[var(--color-surface)] text-sm text-[var(--color-primary-light)] hover:bg-[var(--color-primary)]/20 border border-[var(--color-border)] transition-all">✏️ Bearbeiten</button>
           </div>
         </div>
@@ -450,9 +457,9 @@ function MemberDetailView() {
         )}
       </div>
 
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="glass rounded-2xl p-4 text-center">
-          <p className="text-3xl font-bold text-white">{memberTasks.length}</p>
+      <div className="grid grid-cols-3 gap-3 lg:gap-4 mb-6">
+        <div className="glass rounded-2xl p-3 lg:p-4 text-center">
+          <p className="text-xl lg:text-3xl font-bold text-white">{memberTasks.length}</p>
           <p className="text-xs text-[var(--color-text-muted)]">Aufgaben</p>
         </div>
         <div className="glass rounded-2xl p-4 text-center">
@@ -465,7 +472,7 @@ function MemberDetailView() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
         {/* Tasks */}
         <div className="glass rounded-2xl p-5">
           <h3 className="text-sm font-semibold text-white mb-4">📋 Aufgaben ({memberTasks.length})</h3>

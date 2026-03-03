@@ -170,8 +170,8 @@ export function TasksPage() {
                 </button>
             </div>
 
-            <div className="glass rounded-2xl overflow-hidden">
-                <table className="w-full text-sm">
+            <div className="glass rounded-2xl overflow-x-auto">
+                <table className="w-full text-sm min-w-[700px]">
                     <thead>
                         <tr className="border-b border-[var(--color-border)]">
                             <th className="text-left px-4 py-3 text-[var(--color-text-muted)] font-medium">Aufgabe</th>
@@ -269,7 +269,7 @@ export function TeamPage() {
                 </button>
             </div>
 
-            <div className="grid grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
                 {teamMembers.map((member) => {
                     const activeTasks = getActiveTasks(member.initials);
                     const memberProjects = getMemberProjects(member.initials);
@@ -377,7 +377,7 @@ export function ReportsPage() {
             </div>
 
             {/* Top KPIs */}
-            <div className="grid grid-cols-4 gap-5">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-5">
                 <div className="glass rounded-2xl p-5 border-l-4 border-l-[var(--color-success)]">
                     <p className="text-sm text-[var(--color-text-muted)]">Aufgaben-Abschlussrate</p>
                     <p className="text-3xl font-bold text-white mt-1">{completionRate}%</p>
@@ -401,7 +401,7 @@ export function ReportsPage() {
             </div>
 
             {/* Charts Area */}
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 {/* Project Progress */}
                 <div className="glass rounded-2xl p-6">
                     <h3 className="text-sm font-semibold text-white mb-4">Projekt-Fortschritt & Budget</h3>
@@ -491,7 +491,7 @@ export function SettingsPage() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label className="block text-xs font-medium text-[var(--color-text-muted)] mb-1">Voller Name</label>
                         <input type="text" defaultValue="Jörg Michno" className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-[var(--color-primary)]" />
@@ -503,7 +503,7 @@ export function SettingsPage() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <div className="glass rounded-2xl p-6">
                     <h3 className="text-sm font-semibold text-white mb-4 border-b border-[var(--color-border)] pb-2">App-Einstellungen</h3>
                     <div className="space-y-4">
