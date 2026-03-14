@@ -4,12 +4,11 @@ import { useApp } from "../context";
 
 const navItems = [
     { icon: "📊", label: "Dashboard", page: "dashboard" },
+    { icon: "💰", label: "Revenue", page: "revenue" },
+    { icon: "🏢", label: "Modelle", page: "business-models" },
     { icon: "📁", label: "Projekte", page: "projects" },
     { icon: "✅", label: "Aufgaben", page: "tasks" },
     { icon: "👥", label: "Team", page: "team" },
-    { icon: "📅", label: "Gantt-Planer", page: "calendar" },
-    { icon: "📈", label: "Berichte", page: "reports" },
-    { icon: "⚙️", label: "Einstellungen", page: "settings" },
 ];
 
 export default function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) {
@@ -35,12 +34,12 @@ export default function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobile
                     onClick={() => setCurrentPage("dashboard")}
                     className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-accent)] flex items-center justify-center text-white font-bold text-sm shrink-0 hover:scale-105 transition-transform"
                 >
-                    PM
+                    BB
                 </button>
                 {!collapsed && (
                     <div className="animate-fade-in">
-                        <h1 className="text-base font-bold text-white leading-tight">Project Manager</h1>
-                        <p className="text-[11px] text-[var(--color-text-muted)]">Dashboard v2.0</p>
+                        <h1 className="text-base font-bold text-white leading-tight">Business Brain</h1>
+                        <p className="text-[11px] text-[var(--color-text-muted)]">AI-Labs v1.0</p>
                     </div>
                 )}
             </div>

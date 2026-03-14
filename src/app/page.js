@@ -8,8 +8,10 @@ import ProjectCard from "./components/ProjectCard";
 import ActivityChart from "./components/ActivityChart";
 import KanbanBoard from "./components/KanbanBoard";
 import { AddTaskModal, TaskDetailModal, ProjectModal, MemberModal, DeleteConfirmModal, NotificationsPanel } from "./components/Modals";
-import { ProjectsPage, TasksPage, TeamPage, PlaceholderPage, ReportsPage, SettingsPage } from "./components/Pages";
-import GanttChart from "./components/GanttChart";
+import { ProjectsPage, TasksPage, TeamPage, PlaceholderPage } from "./components/Pages";
+import RevenuePage from "./components/RevenuePage";
+import BusinessModelsPage from "./components/BusinessModelsPage";
+import { revenueStrategy } from "./data";
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -72,12 +74,11 @@ function DashboardContent() {
 
   function renderPage() {
     switch (currentPage) {
+      case "revenue": return <RevenuePage />;
+      case "business-models": return <BusinessModelsPage />;
       case "projects": return <ProjectsPage />;
       case "tasks": return <TasksPage />;
       case "team": return <TeamPage />;
-      case "calendar": return <GanttChart />;
-      case "reports": return <ReportsPage />;
-      case "settings": return <SettingsPage />;
       case "project-detail": return <ProjectDetailView />;
       case "member-detail": return <MemberDetailView />;
       default: return renderDashboard();
@@ -87,8 +88,65 @@ function DashboardContent() {
   function renderDashboard() {
     const warnings = getWarnings();
 
+    const algDays = Math.ceil((new Date(revenueStrategy.algEndDate) - new Date()) / (1000 * 60 * 60 * 24));
+    const algUrgency = algDays <= 14 ? "#f87171" : algDays <= 28 ? "#fbbf24" : "#34d399";
+    const proposalPct = Math.round((revenueStrategy.proposalCounter.current / revenueStrategy.proposalCounter.target) * 100);
+
     return (
       <>
+        {/* HERO: Counter + Countdown */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 animate-fade-in">
+          {/* ALG Countdown */}
+          <div
+            className="rounded-2xl p-6 border-2 cursor-pointer hover:scale-[1.01] transition-all"
+            style={{ borderColor: algUrgency + "66", background: `linear-gradient(135deg, ${algUrgency}11, ${algUrgency}05)` }}
+            onClick={() => setCurrentPage("revenue")}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium" style={{ color: algUrgency }}>ALG COUNTDOWN</p>
+                <p className="text-xs text-white/40 mt-1">Verbleibend bis 21.04.2026</p>
+              </div>
+              <div className="text-right">
+                <div className="text-6xl font-black" style={{ color: algUrgency }}>{algDays}</div>
+                <div className="text-sm text-white/50">Tage</div>
+              </div>
+            </div>
+            <div className="w-full h-3 rounded-full bg-white/10 mt-4 overflow-hidden">
+              <div className="h-full rounded-full transition-all" style={{ width: `${Math.max(0, 100 - (algDays / 38) * 100)}%`, background: algUrgency }} />
+            </div>
+          </div>
+
+          {/* Proposal Counter */}
+          <div
+            className="rounded-2xl p-6 border-2 cursor-pointer hover:scale-[1.01] transition-all"
+            style={{ borderColor: proposalPct > 0 ? "#6366f166" : "#f8717166", background: proposalPct > 0 ? "rgba(99,102,241,0.08)" : "rgba(248,113,113,0.08)" }}
+            onClick={() => setCurrentPage("revenue")}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium" style={{ color: proposalPct > 0 ? "#818cf8" : "#f87171" }}>PROPOSAL COUNTER</p>
+                <p className="text-xs text-white/40 mt-1">30-Reps-Regel — kein Pivot davor</p>
+              </div>
+              <div className="text-right">
+                <div className="text-6xl font-black" style={{ color: proposalPct > 0 ? "#818cf8" : "#f87171" }}>
+                  {revenueStrategy.proposalCounter.current}<span className="text-2xl text-white/30">/{revenueStrategy.proposalCounter.target}</span>
+                </div>
+                <div className="text-sm text-white/50">Proposals</div>
+              </div>
+            </div>
+            <div className="w-full h-3 rounded-full bg-white/10 mt-4 overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all"
+                style={{
+                  width: `${Math.max(proposalPct, 2)}%`,
+                  background: proposalPct > 0 ? "linear-gradient(90deg, #6366f1, #22d3ee)" : "#f87171",
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Warnings Banner */}
         {warnings.length > 0 && (
           <div className="mb-6 flex flex-col gap-2 animate-fade-in">
