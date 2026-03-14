@@ -92,9 +92,53 @@ function DashboardContent() {
     const algUrgency = algDays <= 14 ? "#f87171" : algDays <= 28 ? "#fbbf24" : "#34d399";
     const proposalPct = Math.round((revenueStrategy.proposalCounter.current / revenueStrategy.proposalCounter.target) * 100);
 
+    // Outbound Heartbeat
+    const targets = revenueStrategy.dailyTargets;
+    const totalDone = Object.values(targets).reduce((s, t) => s + t.done, 0);
+    const totalTarget = Object.values(targets).reduce((s, t) => s + t.target, 0);
+    const heartPct = totalTarget > 0 ? Math.round((totalDone / totalTarget) * 100) : 0;
+    const heartColor = heartPct >= 80 ? "#34d399" : heartPct >= 40 ? "#fbbf24" : "#f87171";
+
     return (
       <>
-        {/* HERO: Counter + Countdown */}
+        {/* OUTBOUND HEARTBEAT — Das Wichtigste */}
+        <div className="rounded-2xl p-5 border-2 mb-6 animate-fade-in cursor-pointer hover:scale-[1.005] transition-all"
+          style={{ borderColor: heartColor + "44", background: `linear-gradient(135deg, ${heartColor}08, ${heartColor}03)` }}
+          onClick={() => setCurrentPage("revenue")}
+        >
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <div className="text-3xl" style={{ animation: totalDone > 0 ? "pulse 1s infinite" : "pulse 3s infinite" }}>
+                {heartPct >= 80 ? "💚" : heartPct >= 40 ? "💛" : "❤️"}
+              </div>
+              <div>
+                <p className="text-sm font-bold text-white">OUTBOUND HEARTBEAT</p>
+                <p className="text-xs text-white/40">Taeglich: 10 Emails + 3 Proposals + 5 Follow-ups</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-4xl font-black" style={{ color: heartColor }}>
+                {totalDone}<span className="text-lg text-white/30">/{totalTarget}</span>
+              </div>
+              <div className="text-xs text-white/40">Aktionen heute</div>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            {Object.entries(targets).map(([key, t]) => {
+              const iPct = t.target > 0 ? Math.round((t.done / t.target) * 100) : 0;
+              const iColor = iPct >= 80 ? "#34d399" : iPct >= 40 ? "#fbbf24" : "#f87171";
+              return (
+                <div key={key} className="flex items-center gap-2 p-2 rounded-lg bg-white/5">
+                  <span>{t.icon}</span>
+                  <span className="text-sm font-bold" style={{ color: iColor }}>{t.done}/{t.target}</span>
+                  <span className="text-[10px] text-white/40 hidden sm:inline">{t.label}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ALG + Proposals */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 animate-fade-in">
           {/* ALG Countdown */}
           <div
