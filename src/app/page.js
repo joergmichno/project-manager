@@ -11,6 +11,7 @@ import { AddTaskModal, TaskDetailModal, ProjectModal, MemberModal, DeleteConfirm
 import { ProjectsPage, TasksPage, TeamPage, PlaceholderPage } from "./components/Pages";
 import RevenuePage from "./components/RevenuePage";
 import BusinessModelsPage from "./components/BusinessModelsPage";
+import NichesPage from "./components/NichesPage";
 import { revenueStrategy } from "./data";
 
 function getGreeting() {
@@ -76,6 +77,7 @@ function DashboardContent() {
     switch (currentPage) {
       case "revenue": return <RevenuePage />;
       case "business-models": return <BusinessModelsPage />;
+      case "niches": return <NichesPage />;
       case "projects": return <ProjectsPage />;
       case "tasks": return <TasksPage />;
       case "team": return <TeamPage />;

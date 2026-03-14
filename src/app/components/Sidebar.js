@@ -7,6 +7,7 @@ const navItems = [
     { icon: "💰", label: "Revenue", page: "revenue" },
     { icon: "🏢", label: "Modelle", page: "business-models" },
     { icon: "📁", label: "Projekte", page: "projects" },
+    { icon: "🎯", label: "Nischen", page: "niches" },
     { icon: "✅", label: "Aufgaben", page: "tasks" },
     { icon: "👥", label: "Team", page: "team" },
 ];
